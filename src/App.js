@@ -32,7 +32,6 @@ class App extends Component{
         <ol>
           {listItems}
         </ol>
-        <p>halp</p>
       </div>
     );
   }
