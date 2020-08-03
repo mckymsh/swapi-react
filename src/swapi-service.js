@@ -6,7 +6,7 @@ class SWAPIService{
 				if(!response.ok){
 					this.handleResponseError(response);
 				}
-				return response.json();//.results;
+				return response.json(); //.results;
 			})
 			.then(json => {
 				const names = [];
