@@ -26,7 +26,6 @@ class SWAPIService{
 	}
 
 	handleError(error){
-		document.write("Error: " + error);
 		document.write(error.message);
 	}
 }
