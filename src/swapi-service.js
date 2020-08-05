@@ -1,6 +1,6 @@
 class SWAPIService{
 	async retrieveItems(){
-		var url = "http://swapi.dev/api/people/";
+		var url = "https://swapi.dev/api/people/";
 		return fetch(url)
 			.then(response => {
 				if(!response.ok){
