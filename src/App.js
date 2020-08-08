@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import SWAPIService from './swapi-service';
-// import './App.css';
+import './App.css';
 
 class App extends Component{
 
@@ -8,7 +8,11 @@ class App extends Component{
     super(props);
     this.swapiService = new SWAPIService();
     this.state = {
-      items: null
+      items: null,
+      baseUrl: "https://swapi.dev/api/",
+      category: "",
+      sort: "name",
+      sortDirection: "ascending",
     }
   }
 
@@ -39,12 +43,24 @@ class App extends Component{
     );
   }
 
-  getItems(){
-    var url = "https://swapi.dev/api/people/";
-    this.swapiService.retrieveRequestRecursive(url)
-      .then(returnedList => {
-        this.setState({items: returnedList});
-      });
+  async getItems(){
+    const url = this.state.baseUrl + "people";
+    const newItems = await this.getItemsRecursive(url);
+    this.setState({
+      items: newItems,
+    });
+  }
+
+  async getItemsRecursive(url){
+    const data = await this.swapiService.retrieveRequest(url);
+    const json = data;
+    if(json.next === null){
+      return json.results;
+    }else{
+      var nextURL = json.next.slice(0,4) + "s" + json.next.slice(4);
+      var tempResults = await this.getItemsRecursive(nextURL);
+      return json.results.concat(tempResults);        
+    }
   }
 }
 
