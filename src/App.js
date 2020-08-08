@@ -44,7 +44,8 @@ class App extends Component{
   }
 
   async getItems(){
-    const url = "https://swapi.dev/api/people/";//this.state.baseUrl + this.state.category;
+    // const url = "https://swapi.dev/api/people/";
+    const url = this.state.baseUrl + this.state.category + "/";
     const newItems = await this.getItemsRecursive(url);
     this.setState({
       items: newItems,
