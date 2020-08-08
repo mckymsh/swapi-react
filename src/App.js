@@ -28,6 +28,9 @@ class App extends Component{
       <div className="App">
         <header className="App-header">
           <h1>This is a header.</h1>
+          <div className="Buttons">
+          </div>
+          <span className="Item-count">Items: {listItems.length}</span>
         </header>
         <ol>
           {listItems}
@@ -37,10 +40,11 @@ class App extends Component{
   }
 
   getItems(){
-    this.swapiService.retrieveItems()
-    .then(items => {
-      this.setState({items: items});
-    });
+    var url = "https://swapi.dev/api/people/";
+    this.swapiService.retrieveRequest(url)
+      .then(returnedList => {
+        this.setState({items: returnedList});
+      });
   }
 }
 
