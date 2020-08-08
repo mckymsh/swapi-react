@@ -41,7 +41,7 @@ class App extends Component{
 
   getItems(){
     var url = "https://swapi.dev/api/people/";
-    this.swapiService.retrieveRequest(url)
+    this.swapiService.retrieveRequestRecursive(url)
       .then(returnedList => {
         this.setState({items: returnedList});
       });
