@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import SWAPIService from './swapi-service';
-import './App.css';
+// import './App.css';
 
 class App extends Component{
 
@@ -10,7 +10,7 @@ class App extends Component{
     this.state = {
       items: null,
       baseUrl: "https://swapi.dev/api/",
-      category: "",
+      category: "people",
       sort: "name",
       sortDirection: "ascending",
     }
@@ -44,7 +44,7 @@ class App extends Component{
   }
 
   async getItems(){
-    const url = this.state.baseUrl + "people";
+    const url = this.state.baseUrl + this.state.category;
     const newItems = await this.getItemsRecursive(url);
     this.setState({
       items: newItems,
