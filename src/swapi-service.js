@@ -2,6 +2,7 @@ class SWAPIService{
 	async retrieveRequest(requestedURL){
 		const response = await fetch(requestedURL)
 			.catch(error => {
+				document.write(requestedURL);
 				this.handleError(error);
 		});
 		if(!response.ok){
