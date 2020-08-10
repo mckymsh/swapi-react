@@ -45,34 +45,12 @@ class App extends Component{
       window.alert("This shouldn't happen.");
     }
     if(!items) return null;
-    const listItems = items.map((item, index) =>
-        <Card> 
-          <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
-            {item.name}
-          </Accordion.Toggle>
-          <Accordion.Collapse eventKey={index+1}>
-            <Card.Body>
-              <ListGroup variant="flush">
-                <ListGroup.Item>Height: {item.height}</ListGroup.Item>
-                <ListGroup.Item>Mass: {item.mass}</ListGroup.Item>
-                <ListGroup.Item>Hair: {item.hair_color}</ListGroup.Item>
-                <ListGroup.Item>Eyes: {item.eye_color}</ListGroup.Item>
-                <ListGroup.Item>Born: {item.birth_year}</ListGroup.Item>
-                <ListGroup.Item>Gender: {item.gender}</ListGroup.Item>
-              </ListGroup>
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
-    )
-    // I know what you're thinking: "Why is it {index+1} instead of just {index}?"
-    // The answer is simple. When I use {index} the first item in the Accordion
-    // won't open. When I do {index+1}, it does. The indices of the Cards in the
-    // Accordion are the same either way. Absolutely no clue why.
+    var listItems = this.assembleListItems();
 
     return (
       <div className="app">
         <header className="app-header">
-          <h1>This is a header.</h1>
+          <h1>Star Wars API</h1>
           <div className="Buttons">
             <ToggleButtonGroup type="radio" name="category" defaultValue="people">
               {categoryRadios.map((radio) => (
@@ -124,6 +102,139 @@ class App extends Component{
       </div>
     );
   }
+
+  assembleListItems(){
+    const items = this.state.items;
+    var listItems = [];
+    switch(this.state.category){
+        case "people":
+          listItems = items.map((item, index) =>
+            <Card> 
+              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+                {item.name}
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey={index+1}>
+                <Card.Body>
+                  <ListGroup variant="flush">
+                    <ListGroup.Item>Height: {item.height}</ListGroup.Item>
+                    <ListGroup.Item>Mass: {item.mass}</ListGroup.Item>
+                    <ListGroup.Item>Hair: {item.hair_color}</ListGroup.Item>
+                    <ListGroup.Item>Eyes: {item.eye_color}</ListGroup.Item>
+                    <ListGroup.Item>Born: {item.birth_year}</ListGroup.Item>
+                    <ListGroup.Item>Gender: {item.gender}</ListGroup.Item>
+                  </ListGroup>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          );
+          break;
+        case "planets":
+          listItems = items.map((item, index) =>
+            <Card> 
+              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+                {item.name}
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey={index+1}>
+                <Card.Body>
+                  <ListGroup variant="flush">
+                    <ListGroup.Item>Day: {item.rotation_period} hours</ListGroup.Item>
+                    <ListGroup.Item>Year: {item.orbital_period} days</ListGroup.Item>
+                    <ListGroup.Item>Diameter: {item.diameter} km</ListGroup.Item>
+                    <ListGroup.Item>Climate: {item.climate}</ListGroup.Item>
+                    <ListGroup.Item>Gravity: {item.gravity} g</ListGroup.Item>
+                    <ListGroup.Item>Terrain: {item.terrain}</ListGroup.Item>
+                    <ListGroup.Item>Water: {(item.surface_water) ? "yes" : "no"}</ListGroup.Item>
+                    <ListGroup.Item>Population: {item.population}</ListGroup.Item>
+                  </ListGroup>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          );
+          break;
+        case "species":
+          listItems = items.map((item, index) =>
+            <Card> 
+              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+                {item.name}
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey={index+1}>
+                <Card.Body>
+                  <ListGroup variant="flush">
+                    <ListGroup.Item>Classification: {item.classification}</ListGroup.Item>
+                    <ListGroup.Item>Designation: {item.designation}</ListGroup.Item>
+                    <ListGroup.Item>Avg Height: {item.average_height} cm</ListGroup.Item>
+                    <ListGroup.Item>Skin: {item.skin_colors}</ListGroup.Item>
+                    <ListGroup.Item>Hair: {item.hair_colors}</ListGroup.Item>
+                    <ListGroup.Item>Eyes: {item.eye_colors}</ListGroup.Item>
+                    <ListGroup.Item>Avg Lifespan: {item.average_lifespan}</ListGroup.Item>
+                    <ListGroup.Item>Language: {item.language}</ListGroup.Item>
+                  </ListGroup>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          );
+          break;
+        case "vehicles":
+          listItems = items.map((item, index) =>
+            <Card> 
+              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+                {item.name}
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey={index+1}>
+                <Card.Body>
+                  <ListGroup variant="flush">
+                    <ListGroup.Item>Model: {item.model}</ListGroup.Item>
+                    <ListGroup.Item>Manufacturer: {item.manufacturer}</ListGroup.Item>
+                    <ListGroup.Item>Cost: {item.cost_in_credits} credits</ListGroup.Item>
+                    <ListGroup.Item>Length: {item.length}</ListGroup.Item>
+                    <ListGroup.Item>Max Speed: {item.max_atmosphering_speed} km/h</ListGroup.Item>
+                    <ListGroup.Item>Crew: {item.crew}</ListGroup.Item>
+                    <ListGroup.Item>Passengers: {item.passengers}</ListGroup.Item>
+                    <ListGroup.Item>Cargo Cap.: {item.cargo_capacity}</ListGroup.Item>
+                    <ListGroup.Item>Consumables: {item.consumables}</ListGroup.Item>
+                    <ListGroup.Item>Class: {item.vehicle_class}</ListGroup.Item>
+                  </ListGroup>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          );
+          break;
+        case "starships":
+          listItems = items.map((item, index) =>
+            <Card> 
+              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+                {item.name}
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey={index+1}>
+                <Card.Body>
+                  <ListGroup variant="flush">
+                    <ListGroup.Item>Model: {item.model}</ListGroup.Item>
+                    <ListGroup.Item>Manufacturer: {item.manufacturer}</ListGroup.Item>
+                    <ListGroup.Item>Cost: {item.cost_in_credits} credits</ListGroup.Item>
+                    <ListGroup.Item>Length: {item.length}</ListGroup.Item>
+                    <ListGroup.Item>Max Speed: {item.max_atmosphering_speed} km/h</ListGroup.Item>
+                    <ListGroup.Item>Crew: {item.crew}</ListGroup.Item>
+                    <ListGroup.Item>Passengers: {item.passengers}</ListGroup.Item>
+                    <ListGroup.Item>Cargo Cap.: {item.cargo_capacity}</ListGroup.Item>
+                    <ListGroup.Item>Consumables: {item.consumables}</ListGroup.Item>
+                    <ListGroup.Item>Hyperdrive Rating: {item.hyperdrive_rating}</ListGroup.Item>
+                    <ListGroup.Item>Class: {item.starship_class}</ListGroup.Item>
+                  </ListGroup>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          );
+          break;
+        default:
+          listItems = null;
+    }
+    return listItems;
+  }
+
+    // I know what you're thinking: Why is it {index+1} instead of just {index}?
+    // The answer is simple. When I use {index} the first item in the Accordion
+    // won't open. When I do {index+1}, it does. The indices of the Cards in the
+    // Accordion are the same either way. Absolutely no clue why.
 
   setShowAll(target){
     var checked = this.state.showAll;
