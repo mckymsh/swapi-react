@@ -3,7 +3,7 @@ import SWAPIService from './swapi-service';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   Button, ButtonGroup, ToggleButtonGroup, ToggleButton, 
-  Alert, Accordion, Card
+  Alert, Accordion, Card, ListGroup
 } from 'react-bootstrap';
 import './App.css';
 
@@ -51,7 +51,16 @@ class App extends Component{
             {item.name}
           </Accordion.Toggle>
           <Accordion.Collapse eventKey={index+1}>
-            <Card.Body>This is {index}. More info about {item.name} here.</Card.Body>
+            <Card.Body>
+              <ListGroup variant="flush">
+                <ListGroup.Item>Height: {item.height}</ListGroup.Item>
+                <ListGroup.Item>Mass: {item.mass}</ListGroup.Item>
+                <ListGroup.Item>Hair: {item.hair_color}</ListGroup.Item>
+                <ListGroup.Item>Eyes: {item.eye_color}</ListGroup.Item>
+                <ListGroup.Item>Born: {item.birth_year}</ListGroup.Item>
+                <ListGroup.Item>Gender: {item.gender}</ListGroup.Item>
+              </ListGroup>
+            </Card.Body>
           </Accordion.Collapse>
         </Card>
     )
