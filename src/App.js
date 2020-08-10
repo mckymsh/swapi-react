@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import SWAPIService from './swapi-service';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Button, ButtonGroup, ToggleButtonGroup, ToggleButton, Alert, ListGroup} from 'react-bootstrap';
-// import './App.css';
+import {
+  Button, ButtonGroup, ToggleButtonGroup, ToggleButton, 
+  Alert, Accordion, Card
+} from 'react-bootstrap';
+import './App.css';
 
 class App extends Component{
 
@@ -14,7 +17,7 @@ class App extends Component{
       baseUrl: "https://swapi.dev/api/",
       category: "people",
       overallCount: 0,
-      sort: "name",
+      sort: null,
       sortDirection: "ascending",
       showAll: false,
       loading: true,
@@ -37,12 +40,26 @@ class App extends Component{
       {name: 'Ships', value: 'starships'},
     ];
     const items = this.state.items;
+    if(this.state.sort){
+      // sorting here
+      window.alert("This shouldn't happen.");
+    }
     if(!items) return null;
-    const listItems = items.map((item) =>
-      <ListGroup>
-        <ListGroup.Item>{item.name}</ListGroup.Item>
-      </ListGroup>
+    const listItems = items.map((item, index) =>
+        <Card> 
+          <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+            {item.name}
+          </Accordion.Toggle>
+          <Accordion.Collapse eventKey={index+1}>
+            <Card.Body>This is {index}. More info about {item.name} here.</Card.Body>
+          </Accordion.Collapse>
+        </Card>
     )
+    // I know what you're thinking: "Why is it {index+1} instead of just {index}?"
+    // The answer is simple. When I use {index} the first item in the Accordion
+    // won't open. When I do {index+1}, it does. The indices of the Cards in the
+    // Accordion are the same either way. Absolutely no clue why.
+
     return (
       <div className="app">
         <header className="app-header">
@@ -62,8 +79,7 @@ class App extends Component{
               ))}
             </ToggleButtonGroup>
             <br/>
-            <ButtonGroup name="page-buttons">
-              
+            <ButtonGroup name="page-buttons">              
               <Button 
                 variant="secondary"
                 value="previous"
@@ -93,9 +109,9 @@ class App extends Component{
           Page: {this.state.pageNumber}/{this.state.showAll ? 1 : Math.ceil(this.state.overallCount/10)}
           </Alert>
         </header>
-        <ol>
+        <Accordion>
           {listItems}
-        </ol>
+        </Accordion>
       </div>
     );
   }
@@ -140,7 +156,7 @@ class App extends Component{
     }else{
       url = this.state.baseUrl + this.state.category + "/";
     }
-    var newItems = []
+    var newItems = [];
     var itemCount = 0;
     if(this.state.showAll){
       newItems = await this.getItemsRecursive(url);
