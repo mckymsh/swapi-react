@@ -3,7 +3,7 @@ import SWAPIService from './swapi-service';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   Button, ButtonGroup, ToggleButtonGroup, ToggleButton, 
-  Alert, Accordion, Card, ListGroup
+  Alert, Accordion, Card, ListGroup, Container, Row, Col,
 } from 'react-bootstrap';
 import './App.css';
 
@@ -51,58 +51,76 @@ class App extends Component{
       <div className="app">
         <header className="app-header">
           <h1>Star Wars API</h1>
-          <div className="Buttons">
-            <ToggleButtonGroup type="radio" name="category" defaultValue="people">
-              {categoryRadios.map((radio) => (
-                <ToggleButton
-                  type="radio"
+          <Container fluid="sm">
+            <Row>
+              <ToggleButtonGroup type="radio" name="category" defaultValue="people">
+                {categoryRadios.map((radio) => (
+                    <ToggleButton
+                      type="radio"
+                      variant="secondary"
+                      name={radio.value}
+                      value={radio.value}
+                      onChange={(e) => this.setCategory(e.currentTarget.value)}
+                    >
+                      {radio.name}
+                    </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </Row>
+            <Row>
+              <ButtonGroup name="page-buttons">              
+                <Button 
                   variant="secondary"
-                  name={radio.value}
-                  value={radio.value}
-                  onChange={(e) => this.setCategory(e.currentTarget.value)}
+                  value="previous"
+                  onClick={(e) => this.changePage(e.currentTarget)}
                 >
-                  {radio.name}
-                </ToggleButton>
-              ))}
-            </ToggleButtonGroup>
-            <br/>
-            <ButtonGroup name="page-buttons">              
-              <Button 
-                variant="secondary"
-                value="previous"
-                onClick={(e) => this.changePage(e.currentTarget)}
-              >
-                Previous
-              </Button>
-              <ToggleButton 
-                type="checkbox"
-                variant="secondary" 
-                checked={this.state.showAll}
-                onChange={(e) => this.setShowAll(e.currentTarget)}
-              >
-                Show All
-              </ToggleButton>
-              <Button 
-                variant="secondary"
-                value="next"
-                onClick={(e) => this.changePage(e.currentTarget)}
-              >
-                Next
-              </Button>
-            </ButtonGroup>
-          </div>
-          <Alert className="item-count" variant='info'>
-          Count: {this.state.overallCount} <br/>
-          Page: {this.state.pageNumber}/{this.state.showAll ? 1 : Math.ceil(this.state.overallCount/10)}
-          </Alert>
+                  Previous
+                </Button>
+                <ButtonGroup toggle>
+                  <ToggleButton 
+                    type="checkbox"
+                    variant="secondary" 
+                    checked={this.state.showAll}
+                    onChange={(e) => this.setShowAll(e.currentTarget)}
+                  >
+                    All
+                  </ToggleButton>
+                </ButtonGroup>
+                <Button 
+                  variant="secondary"
+                  value="next"
+                  onClick={(e) => this.changePage(e.currentTarget)}
+                >
+                  Next
+                </Button>
+              </ButtonGroup>
+            </Row>
+            <Row>
+              <Container fluid="sm">
+                <Row>
+                  <Alert className="item-count" variant='info'>
+                    Count: {this.state.overallCount} - Page: {this.state.pageNumber}/{this.getPageCount()}
+                  </Alert>
+                </Row>
+              </Container>
+            </Row>
+          </Container>
+         
         </header>
-        <Accordion>
-          {listItems}
-        </Accordion>
+        <Container fluid="sm">
+          <Accordion>
+            {listItems}
+          </Accordion>
+        </Container>
       </div>
     );
   }
 
+   
+
+  // There is probably a way to do this more procedurally, but with so
+  // few categories, it was worth the ten minutes to hand-code it 
+  // rather than the hours of debugging to automagically generate it.
   assembleListItems(){
     const items = this.state.items;
     var listItems = [];
@@ -186,11 +204,11 @@ class App extends Component{
                     <ListGroup.Item>Model: {item.model}</ListGroup.Item>
                     <ListGroup.Item>Manufacturer: {item.manufacturer}</ListGroup.Item>
                     <ListGroup.Item>Cost: {item.cost_in_credits} credits</ListGroup.Item>
-                    <ListGroup.Item>Length: {item.length}</ListGroup.Item>
+                    <ListGroup.Item>Length: {item.length} m</ListGroup.Item>
                     <ListGroup.Item>Max Speed: {item.max_atmosphering_speed} km/h</ListGroup.Item>
                     <ListGroup.Item>Crew: {item.crew}</ListGroup.Item>
                     <ListGroup.Item>Passengers: {item.passengers}</ListGroup.Item>
-                    <ListGroup.Item>Cargo Cap.: {item.cargo_capacity}</ListGroup.Item>
+                    <ListGroup.Item>Cargo Cap.: {item.cargo_capacity} kg</ListGroup.Item>
                     <ListGroup.Item>Consumables: {item.consumables}</ListGroup.Item>
                     <ListGroup.Item>Class: {item.vehicle_class}</ListGroup.Item>
                   </ListGroup>
@@ -211,11 +229,11 @@ class App extends Component{
                     <ListGroup.Item>Model: {item.model}</ListGroup.Item>
                     <ListGroup.Item>Manufacturer: {item.manufacturer}</ListGroup.Item>
                     <ListGroup.Item>Cost: {item.cost_in_credits} credits</ListGroup.Item>
-                    <ListGroup.Item>Length: {item.length}</ListGroup.Item>
-                    <ListGroup.Item>Max Speed: {item.max_atmosphering_speed} km/h</ListGroup.Item>
+                    <ListGroup.Item>Length: {item.length} m</ListGroup.Item>
+                    <ListGroup.Item>Max Atmospheric Speed: {item.max_atmosphering_speed} km/h</ListGroup.Item>
                     <ListGroup.Item>Crew: {item.crew}</ListGroup.Item>
                     <ListGroup.Item>Passengers: {item.passengers}</ListGroup.Item>
-                    <ListGroup.Item>Cargo Cap.: {item.cargo_capacity}</ListGroup.Item>
+                    <ListGroup.Item>Cargo Cap.: {item.cargo_capacity} kg</ListGroup.Item>
                     <ListGroup.Item>Consumables: {item.consumables}</ListGroup.Item>
                     <ListGroup.Item>Hyperdrive Rating: {item.hyperdrive_rating}</ListGroup.Item>
                     <ListGroup.Item>Class: {item.starship_class}</ListGroup.Item>
@@ -230,11 +248,14 @@ class App extends Component{
     }
     return listItems;
   }
+  // I know what you're thinking: Why is it {index+1} instead of just {index}?
+  // The answer is simple. When I use {index} the first item in the Accordion
+  // won't open. When I do {index+1}, it does. The indices of the Cards in the
+  // Accordion are the same either way. Absolutely no clue why.
 
-    // I know what you're thinking: Why is it {index+1} instead of just {index}?
-    // The answer is simple. When I use {index} the first item in the Accordion
-    // won't open. When I do {index+1}, it does. The indices of the Cards in the
-    // Accordion are the same either way. Absolutely no clue why.
+  getPageCount(){
+    return this.state.showAll ? 1 : Math.ceil(this.state.overallCount/10);
+  }
 
   setShowAll(target){
     var checked = this.state.showAll;
@@ -252,6 +273,9 @@ class App extends Component{
     }else{
       newPageUrl = this.state.previousPage;
     }
+    // The null-check here stops us from attempting to change
+    // to pages that don't exist. Not the only way, but the
+    // easiest way.
     if(newPageUrl){
       this.getItems(newPageUrl);
       this.setState({ // more accurate than counting, eh?
@@ -296,6 +320,8 @@ class App extends Component{
     });
   }
 
+  // What is a college education good for if not for adding
+  // unnecessary recursion to a simplistic app?
   async getItemsRecursive(url){
     const json = await this.swapiService.retrieveRequest(url);
     if(json.next === null){
