@@ -1,0 +1,24 @@
+$body-bg: #9C4FB0;
+
+$enable-rounded: false;
+
+$theme-colors: ();
+$theme-colors: map-merge(
+	(
+		"primary": #9C4FB0,
+		"secondary": #B09C4F,
+		"warning": #4FB09C,
+	),
+	$theme-colors
+);
+
+.container{
+	align-content: flex-end;
+}
+
+.category-radios{
+	justify-content: flex-end;
+}
+
+
+@import '~bootstrap/scss/bootstrap.scss';

@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import SWAPIService from './swapi-service';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import './custom.scss';
 import {
   Button, ButtonGroup, ToggleButtonGroup, ToggleButton, 
-  Alert, Accordion, Card, ListGroup, Container, Row, Col,
+  Accordion, Card, ListGroup, Container, Row,
 } from 'react-bootstrap';
-import './App.css';
+// import './App.css';
 
 class App extends Component{
 
@@ -48,12 +49,12 @@ class App extends Component{
     var listItems = this.assembleListItems();
 
     return (
-      <div className="app">
-        <header className="app-header">
+      <Container className="app">
+        <Container className="app-header">
           <h1>Star Wars API</h1>
-          <Container fluid="sm">
+          <Container>
             <Row>
-              <ToggleButtonGroup type="radio" name="category" defaultValue="people">
+              <ToggleButtonGroup class="category-radios" type="radio" name="category" defaultValue="people">
                 {categoryRadios.map((radio) => (
                     <ToggleButton
                       type="radio"
@@ -68,7 +69,7 @@ class App extends Component{
               </ToggleButtonGroup>
             </Row>
             <Row>
-              <ButtonGroup name="page-buttons">              
+              <ButtonGroup className="page-buttons" name="page-buttons">              
                 <Button 
                   variant="secondary"
                   value="previous"
@@ -76,16 +77,24 @@ class App extends Component{
                 >
                   Previous
                 </Button>
-                <ButtonGroup toggle>
+                <ToggleButtonGroup className="show-all" type="radio" name="showAll" defaultValue="pages">
+                  <ToggleButton
+                    type="radio"
+                    variant="secondary"
+                    value="pages"
+                    onChange={(e) => this.setShowAll(e.currentTarget)}
+                  >
+                    Page: {this.state.pageNumber}/{this.getPageCount()}
+                  </ToggleButton>
                   <ToggleButton 
                     type="checkbox"
                     variant="secondary" 
-                    checked={this.state.showAll}
+                    value="all"
                     onChange={(e) => this.setShowAll(e.currentTarget)}
                   >
-                    All
+                    Show All
                   </ToggleButton>
-                </ButtonGroup>
+                </ToggleButtonGroup>
                 <Button 
                   variant="secondary"
                   value="next"
@@ -95,26 +104,24 @@ class App extends Component{
                 </Button>
               </ButtonGroup>
             </Row>
-            <Row>
-              <Container fluid="sm">
-                <Row>
-                  <Alert className="item-count" variant='info'>
-                    Count: {this.state.overallCount} - Page: {this.state.pageNumber}/{this.getPageCount()}
-                  </Alert>
-                </Row>
-              </Container>
-            </Row>
           </Container>
-         
-        </header>
-        <Container fluid="sm">
-          <Accordion>
+          <Accordion className="results">
             {listItems}
           </Accordion>
         </Container>
-      </div>
+      </Container>
     );
   }
+
+  // <Row>
+  //             <Container fluid="sm">
+  //               <Row>
+  //                 <Alert className="item-count" variant='info'>
+  //                   Count: {this.state.overallCount}
+  //                 </Alert>
+  //               </Row>
+  //             </Container>
+  //           </Row>
 
    
 
@@ -258,11 +265,18 @@ class App extends Component{
   }
 
   setShowAll(target){
-    var checked = this.state.showAll;
-    this.setState({
-      showAll: !checked,
-      pageNumber: 1,
-    }, this.getItems);
+    if(target.value === "all")
+    {
+      this.setState({
+        showAll: true,
+        pageNumber: 1,
+      }, this.getItems);
+    }else{
+      this.setState({
+        showAll: false,
+        pageNumber: 1,
+      }, this.getItems);
+    }
   }
 
   changePage(target){
