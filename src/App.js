@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import SWAPIService from './swapi-service';
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import './custom.scss';
+
 import {
   Button, ButtonGroup, ToggleButtonGroup, ToggleButton, 
   Accordion, Card, ListGroup, Container, Row,
 } from 'react-bootstrap';
+
+import './custom.scss';
 // import './App.css';
 
 class App extends Component{
@@ -50,9 +52,9 @@ class App extends Component{
 
     return (
       <Container className="app">
-        <Container className="app-header">
+        <div className="app-header">
           <h1>Star Wars API</h1>
-          <Container>
+          <div>
             <Row>
               <ToggleButtonGroup class="category-radios" type="radio" name="category" defaultValue="people">
                 {categoryRadios.map((radio) => (
@@ -104,11 +106,11 @@ class App extends Component{
                 </Button>
               </ButtonGroup>
             </Row>
-          </Container>
+          </div>
           <Accordion className="results">
             {listItems}
           </Accordion>
-        </Container>
+        </div>
       </Container>
     );
   }
@@ -141,8 +143,8 @@ class App extends Component{
               <Accordion.Collapse eventKey={index+1}>
                 <Card.Body>
                   <ListGroup variant="flush">
-                    <ListGroup.Item>Height: {item.height}</ListGroup.Item>
-                    <ListGroup.Item>Mass: {item.mass}</ListGroup.Item>
+                    <ListGroup.Item>Height: {item.height} cm</ListGroup.Item>
+                    <ListGroup.Item>Mass: {item.mass} kg</ListGroup.Item>
                     <ListGroup.Item>Hair: {item.hair_color}</ListGroup.Item>
                     <ListGroup.Item>Eyes: {item.eye_color}</ListGroup.Item>
                     <ListGroup.Item>Born: {item.birth_year}</ListGroup.Item>

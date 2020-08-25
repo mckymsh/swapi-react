@@ -1,3 +1,6 @@
+@import '~bootstrap/scss/_functions.scss';
+@import '~bootstrap/scss/_variables.scss';
+
 $body-bg: #9C4FB0;
 
 $enable-rounded: false;
@@ -7,12 +10,17 @@ $theme-colors: map-merge(
 	(
 		"primary": #9C4FB0,
 		"secondary": #B09C4F,
-		"warning": #4FB09C,
 	),
 	$theme-colors
 );
 
-.container{
+div{
+	border-style: dashed;
+	border-color: #ffff00;
+	border-width: 1px;
+}
+
+Container{
 	align-content: flex-end;
 }
 
