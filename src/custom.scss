@@ -1,32 +1,62 @@
+
 @import '~bootstrap/scss/_functions.scss';
 @import '~bootstrap/scss/_variables.scss';
+@import '~bootstrap/scss/_mixins.scss';
+@import '~bootstrap/scss/mixins/_buttons.scss';
+@import '~bootstrap/scss/_buttons.scss';
+@import '~bootstrap/scss/_button-group.scss';
 
-$body-bg: #9C4FB0;
 
 $enable-rounded: false;
 
 $theme-colors: ();
 $theme-colors: map-merge(
 	(
-		"primary": #9C4FB0,
-		"secondary": #B09C4F,
+		"primary": #4F9CB0,
+		"secondary": #9C4FB0,
+		"tertiary": #cc8822,
 	),
 	$theme-colors
 );
 
+$body-bg: theme-color("primary");
+
+$headings-color: $white;
+
+
+
+$btn-transition: none;
+
+@import '~bootstrap/scss/bootstrap.scss';
+
+
 div{
+	// align-content: center;
+	// justify-content: center;
 	border-style: dashed;
 	border-color: #ffff00;
 	border-width: 1px;
 }
 
-Container{
-	align-content: flex-end;
-}
-
 .category-radios{
-	justify-content: flex-end;
+	display: inline-flex;
+	flex: 0 1 auto;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+}
+
+.category-radio{
+	display: inline-flex;
+	align-content: center;
+	justify-content: center;
+
+	// border-style: dashed;
+	// border-color: #ffff00;
+	// border-width: 1px;
 }
 
 
-@import '~bootstrap/scss/bootstrap.scss';
+
+

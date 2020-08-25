@@ -8,7 +8,6 @@ import {
 } from 'react-bootstrap';
 
 import './custom.scss';
-// import './App.css';
 
 class App extends Component{
 
@@ -56,9 +55,10 @@ class App extends Component{
           <h1>Star Wars API</h1>
           <div>
             <Row>
-              <ToggleButtonGroup class="category-radios" type="radio" name="category" defaultValue="people">
+              <ToggleButtonGroup className="category-radios" type="radio" name="category" defaultValue="people">
                 {categoryRadios.map((radio) => (
                     <ToggleButton
+                      className="category-radio"
                       type="radio"
                       variant="secondary"
                       name={radio.value}
@@ -75,6 +75,7 @@ class App extends Component{
                 <Button 
                   variant="secondary"
                   value="previous"
+                  disabled={this.state.showAll}
                   onClick={(e) => this.changePage(e.currentTarget)}
                 >
                   Previous
@@ -100,6 +101,7 @@ class App extends Component{
                 <Button 
                   variant="secondary"
                   value="next"
+                  disabled={this.state.showAll}
                   onClick={(e) => this.changePage(e.currentTarget)}
                 >
                   Next
@@ -115,7 +117,6 @@ class App extends Component{
     );
   }
 
-  // <Row>
   //             <Container fluid="sm">
   //               <Row>
   //                 <Alert className="item-count" variant='info'>
@@ -123,7 +124,6 @@ class App extends Component{
   //                 </Alert>
   //               </Row>
   //             </Container>
-  //           </Row>
 
    
 
