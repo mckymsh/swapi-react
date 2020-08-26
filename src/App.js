@@ -71,8 +71,9 @@ class App extends Component{
               </ToggleButtonGroup>
             </Row>
             <Row>
-              <ButtonGroup className="page-buttons" name="page-buttons">              
+              <ButtonGroup className="page-buttons">              
                 <Button 
+                  className="next-previous-button"
                   variant="secondary"
                   value="previous"
                   disabled={this.state.showAll}
@@ -99,6 +100,7 @@ class App extends Component{
                   </ToggleButton>
                 </ToggleButtonGroup>
                 <Button 
+                  className="next-previous-button"
                   variant="secondary"
                   value="next"
                   disabled={this.state.showAll}
