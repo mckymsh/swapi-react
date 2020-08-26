@@ -22,15 +22,26 @@ class App extends Component{
       sort: null,
       sortDirection: "ascending",
       showAll: false,
-      loading: true,
+      loading: false,
       nextPage: null,
       previousPage: null,
       pageNumber: 1,
     }
+    this.categories = [
+      "people",
+      "planets",
+      "species",
+      "vehicles",
+      "starships",
+    ];
   }
 
   componentDidMount(){
-    this.getItems(null);
+    if(!this.checkURL()){
+      this.getItems(null);
+    } 
+    // This guarantees a default state if the url/path is blank.
+    // Not sure if it's a *good* way to do that, but it works fine.
   }
   
   render(){
@@ -55,7 +66,7 @@ class App extends Component{
           <h1>Star Wars API</h1>
           <div>
             <Row>
-              <ToggleButtonGroup className="category-radios" type="radio" name="category" defaultValue="people">
+              <ToggleButtonGroup className="category-radios" type="radio" name="category" defaultValue={this.state.category}>
                 {categoryRadios.map((radio) => (
                     <ToggleButton
                       className="category-radio"
@@ -292,8 +303,8 @@ class App extends Component{
       newPageUrl = this.state.previousPage;
     }
     // The null-check here stops us from attempting to change
-    // to pages that don't exist. Not the only way, but the
-    // easiest way.
+    // to pages that don't exist. I also disable the buttons,
+    // but it doesn't hurt to check.
     if(newPageUrl){
       this.getItems(newPageUrl);
       this.setState({ // more accurate than counting, eh?
@@ -302,13 +313,25 @@ class App extends Component{
     }
   }
 
+  checkURL(){
+    const currentPath = window.location.pathname.substring(1).toLowerCase();
+    if(currentPath){
+        this.setCategory(currentPath);
+        return true;
+    }
+    return false;
+  }
+
   setCategory(newCategory){
-    this.setState({
-      category: newCategory,
-      nextPage: null,
-      previousPage: null,
-      pageNumber: 1,
-    }, this.getItems);
+    if(this.categories.includes(newCategory)){
+      // window.alert(newCategory);
+      this.setState({
+        category: newCategory,
+        nextPage: null,
+        previousPage: null,
+        pageNumber: 1,
+      }, this.getItems);
+    }
   }
 
   async getItems(optionalURL){
