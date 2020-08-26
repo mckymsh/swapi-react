@@ -324,7 +324,7 @@ class App extends Component{
 
   setCategory(newCategory){
     if(this.categories.includes(newCategory)){
-      // window.alert(newCategory);
+      window.history.pushState("object or string", "Title", "/"+newCategory);
       this.setState({
         category: newCategory,
         nextPage: null,
