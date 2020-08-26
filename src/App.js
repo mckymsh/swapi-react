@@ -97,7 +97,7 @@ class App extends Component{
                     type="radio"
                     variant="secondary"
                     value="pages"
-                    onChange={(e) => this.setShowAll(e.currentTarget)}
+                    onChange={(e) => this.setShowAll(e.currentTarget.value)}
                   >
                     Page: {this.state.pageNumber}/{this.getPageCount()}
                   </ToggleButton>
@@ -105,7 +105,7 @@ class App extends Component{
                     type="checkbox"
                     variant="secondary" 
                     value="all"
-                    onChange={(e) => this.setShowAll(e.currentTarget)}
+                    onChange={(e) => this.setShowAll(e.currentTarget.value)}
                   >
                     Show All
                   </ToggleButton>
@@ -279,9 +279,14 @@ class App extends Component{
     return this.state.showAll ? 1 : Math.ceil(this.state.overallCount/10);
   }
 
-  setShowAll(target){
-    if(target.value === "all")
+  setShowAll(value){
+    if(value === "all")
     {
+      window.history.pushState(
+        "object or string",
+        "Title",
+        "/"+this.state.category+"/all"
+      );
       this.setState({
         showAll: true,
         pageNumber: 1,
@@ -314,15 +319,19 @@ class App extends Component{
   }
 
   checkURL(){
-    const currentPath = window.location.pathname.substring(1).toLowerCase();
-    if(currentPath){
-        this.setCategory(currentPath);
-        return true;
+    const currentPath = window.location.pathname.toLowerCase().split('/');
+    if(currentPath[0]){
+      this.setCategory(currentPath[0]);
+      return true;
+    }
+    if(currentPath[1]){
+      this.setShowAll("all")
     }
     return false;
   }
 
-  setCategory(newCategory){
+  setCategory(categoryRequested){
+    var newCategory = categoryRequested;
     if(this.categories.includes(newCategory)){
       window.history.pushState("object or string", "Title", "/"+newCategory);
       this.setState({
@@ -331,6 +340,9 @@ class App extends Component{
         previousPage: null,
         pageNumber: 1,
       }, this.getItems);
+    }else{
+      window.history.pushState("object or string", "Title", "/");
+      this.getItems();
     }
   }
 
