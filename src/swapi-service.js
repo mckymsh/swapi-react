@@ -14,11 +14,11 @@ class SWAPIService{
 	}
 
 	handleResponseError(response){
-		document.write("HTTP error. Status: " + response.status);
+		// document.write("HTTP error. Status: " + response.status);
 	}
 
 	handleError(error){
-		document.write("Error in swapi-service: " + error.message);
+		// document.write("Error in swapi-service: " + error.message);
 	}
 }
 

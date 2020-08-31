@@ -346,7 +346,7 @@ class App extends Component{
       }else if(Number(currentPath[2])){
         // magically get selected page
         this.setState({
-          pageNumber: currentPath[2],
+          pageNumber: Math.abs(currentPath[2]), // gotte get them edge cases
         });
       }
 
@@ -385,6 +385,15 @@ class App extends Component{
       itemCount = newItems.length;
     }else{
       var tempData = await this.swapiService.retrieveRequest(url);
+      if(!tempData){
+        // window.alert("Null data returned");
+        const oldPage = Math.min(this.state.pageNumber, 10);
+           // most pages is 9, I think, so I'm comfortable hardcoding a common-sense limit here
+        this.setState({
+          pageNumber: oldPage - 1,
+        }, this.getItems);
+        return; // this is a hack. It's horrible, but I love it.
+      }
       newItems = tempData.results;
       itemCount = tempData.count;
       this.setState({
