@@ -77,7 +77,6 @@ class App extends Component{
                       variant="secondary"
                       name={radio.value}
                       value={radio.value}
-                      checked={radio.value === this.state.category}
                       onChange={(e) => this.setCategory(e.currentTarget.value)}
                     >
                       {radio.name}
@@ -96,7 +95,15 @@ class App extends Component{
                 >
                   Previous
                 </Button>
-                <ToggleButtonGroup className="show-all" type="radio" name="showAll">
+                <ToggleButtonGroup
+                  className="show-all"
+                  type="radio"
+                  name="showAll"
+                  defaultValue={this.state.showAll ? "all" : "pages"} 
+                  // I don't understand why this is necessary.
+                  // Seems to me they should read the state like the 
+                  // page buttons, but they don't. Whatever.
+                >
                   <ToggleButton
                     type="radio"
                     variant="secondary"
