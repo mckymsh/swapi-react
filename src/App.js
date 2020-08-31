@@ -343,8 +343,11 @@ class App extends Component{
       // window.alert(currentPath[2]);
       if(currentPath[2] === "all"){
         this.setShowAll("all")
-      }else if(Number.isInteger(Number(currentPath[2]))){
+      }else if(Number(currentPath[2])){
         // magically get selected page
+        this.setState({
+          pageNumber: currentPath[2],
+        });
       }
 
       return true;
@@ -370,6 +373,8 @@ class App extends Component{
     var url = null;
     if(optionalURL){
       url = optionalURL;
+    }else if(this.state.pageNumber != 1){
+      url = this.state.baseUrl + this.state.category + "/?page=" + this.state.pageNumber;
     }else{
       url = this.state.baseUrl + this.state.category + "/";
     }
