@@ -22,15 +22,26 @@ class App extends Component{
       sort: null,
       sortDirection: "ascending",
       showAll: false,
-      loading: true,
+      loading: false,
       nextPage: null,
       previousPage: null,
       pageNumber: 1,
     }
+    this.categories = [
+      "people",
+      "planets",
+      "species",
+      "vehicles",
+      "starships",
+    ];
   }
 
   componentDidMount(){
-    this.getItems(null);
+    if(!this.checkURL()){
+      this.getItems(null);
+    } 
+    // This guarantees a default state if the url/path is blank.
+    // Not sure if it's a *good* way to do that, but it works fine.
   }
   
   render(){
@@ -47,6 +58,9 @@ class App extends Component{
       window.alert("This shouldn't happen.");
     }
     if(!items) return null;
+
+      this.updateURL();
+
     var listItems = this.assembleListItems();
 
     return (
@@ -55,7 +69,7 @@ class App extends Component{
           <h1>Star Wars API</h1>
           <div>
             <Row>
-              <ToggleButtonGroup className="category-radios" type="radio" name="category" defaultValue="people">
+              <ToggleButtonGroup className="category-radios" type="radio" name="category" defaultValue={this.state.category}>
                 {categoryRadios.map((radio) => (
                     <ToggleButton
                       className="category-radio"
@@ -81,12 +95,21 @@ class App extends Component{
                 >
                   Previous
                 </Button>
-                <ToggleButtonGroup className="show-all" type="radio" name="showAll" defaultValue="pages">
+                <ToggleButtonGroup
+                  className="show-all"
+                  type="radio"
+                  name="showAll"
+                  defaultValue={this.state.showAll ? "all" : "pages"} 
+                  // I don't understand why this is necessary.
+                  // Seems to me they should read the state like the 
+                  // page buttons, but they don't. Whatever.
+                >
                   <ToggleButton
                     type="radio"
                     variant="secondary"
                     value="pages"
-                    onChange={(e) => this.setShowAll(e.currentTarget)}
+                    checked={!this.state.showAll}
+                    onChange={(e) => this.setShowAll(e.currentTarget.value)}
                   >
                     Page: {this.state.pageNumber}/{this.getPageCount()}
                   </ToggleButton>
@@ -94,7 +117,8 @@ class App extends Component{
                     type="checkbox"
                     variant="secondary" 
                     value="all"
-                    onChange={(e) => this.setShowAll(e.currentTarget)}
+                    checked={this.state.showAll}
+                    onChange={(e) => this.setShowAll(e.currentTarget.value)}
                   >
                     Show All
                   </ToggleButton>
@@ -264,8 +288,8 @@ class App extends Component{
     return this.state.showAll ? 1 : Math.ceil(this.state.overallCount/10);
   }
 
-  setShowAll(target){
-    if(target.value === "all")
+  setShowAll(value){
+    if(value === "all")
     {
       this.setState({
         showAll: true,
@@ -279,6 +303,14 @@ class App extends Component{
     }
   }
 
+  updateURL(){
+    window.history.pushState(
+        "object or string",
+        "Title",
+        "/" + this.state.category + "/" + ((this.state.showAll === true) ? "all" : this.state.pageNumber),
+      );
+  }
+
   changePage(target){
     if(this.state.showAll){return;}
     var newPageUrl = null;
@@ -288,8 +320,8 @@ class App extends Component{
       newPageUrl = this.state.previousPage;
     }
     // The null-check here stops us from attempting to change
-    // to pages that don't exist. Not the only way, but the
-    // easiest way.
+    // to pages that don't exist. I also disable the buttons,
+    // but it doesn't hurt to check.
     if(newPageUrl){
       this.getItems(newPageUrl);
       this.setState({ // more accurate than counting, eh?
@@ -298,19 +330,47 @@ class App extends Component{
     }
   }
 
-  setCategory(newCategory){
-    this.setState({
-      category: newCategory,
-      nextPage: null,
-      previousPage: null,
-      pageNumber: 1,
-    }, this.getItems);
+  checkURL(){
+    const currentPath = window.location.pathname.toLowerCase().split('/');
+    // window.alert(currentPath[1]);
+    if(currentPath[1]){
+      this.setCategory(currentPath[1]);
+
+      // window.alert(currentPath[2]);
+      if(currentPath[2] === "all"){
+        this.setShowAll("all")
+      }else if(Number(currentPath[2])){
+        // magically get selected page
+        this.setState({
+          pageNumber: Math.abs(currentPath[2]), // gotte get them edge cases
+        });
+      }
+
+      return true;
+    }
+    return false;
+  }
+
+  setCategory(categoryRequested){
+    var newCategory = categoryRequested;
+    if(this.categories.includes(newCategory)){
+      this.setState({
+        category: newCategory,
+        nextPage: null,
+        previousPage: null,
+        pageNumber: 1,
+      }, this.getItems);
+    }else{
+      this.getItems();
+    }
   }
 
   async getItems(optionalURL){
     var url = null;
     if(optionalURL){
       url = optionalURL;
+    }else if(this.state.pageNumber != 1){
+      url = this.state.baseUrl + this.state.category + "/?page=" + this.state.pageNumber;
     }else{
       url = this.state.baseUrl + this.state.category + "/";
     }
@@ -321,6 +381,15 @@ class App extends Component{
       itemCount = newItems.length;
     }else{
       var tempData = await this.swapiService.retrieveRequest(url);
+      if(!tempData){
+        // window.alert("Null data returned");
+        const oldPage = Math.min(this.state.pageNumber, 10);
+           // most pages is 9, I think, so I'm comfortable hardcoding a common-sense limit here
+        this.setState({
+          pageNumber: oldPage - 1,
+        }, this.getItems);
+        return; // this is a hack. It's horrible, but I love it.
+      }
       newItems = tempData.results;
       itemCount = tempData.count;
       this.setState({
