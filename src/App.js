@@ -369,7 +369,7 @@ class App extends Component{
     var url = null;
     if(optionalURL){
       url = optionalURL;
-    }else if(this.state.pageNumber != 1){
+    }else if(this.state.pageNumber !== 1){
       url = this.state.baseUrl + this.state.category + "/?page=" + this.state.pageNumber;
     }else{
       url = this.state.baseUrl + this.state.category + "/";
