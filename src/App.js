@@ -139,10 +139,10 @@ class App extends Component{
         case "people":
           listItems = items.map((item, index) =>
             <Card> 
-              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index.toString()}>
                 {item.name}
               </Accordion.Toggle>
-              <Accordion.Collapse eventKey={index+1}>
+              <Accordion.Collapse eventKey={index.toString()}>
                 <Card.Body>
                   <ListGroup variant="flush">
                     <ListGroup.Item>Height: {item.height} cm</ListGroup.Item>
@@ -160,10 +160,10 @@ class App extends Component{
         case "planets":
           listItems = items.map((item, index) =>
             <Card> 
-              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index.toString()}>
                 {item.name}
               </Accordion.Toggle>
-              <Accordion.Collapse eventKey={index+1}>
+              <Accordion.Collapse eventKey={index.toString()}>
                 <Card.Body>
                   <ListGroup variant="flush">
                     <ListGroup.Item>Day: {item.rotation_period} hours</ListGroup.Item>
@@ -183,10 +183,10 @@ class App extends Component{
         case "species":
           listItems = items.map((item, index) =>
             <Card> 
-              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index.toString()}>
                 {item.name}
               </Accordion.Toggle>
-              <Accordion.Collapse eventKey={index+1}>
+              <Accordion.Collapse eventKey={index.toString()}>
                 <Card.Body>
                   <ListGroup variant="flush">
                     <ListGroup.Item>Classification: {item.classification}</ListGroup.Item>
@@ -206,10 +206,10 @@ class App extends Component{
         case "vehicles":
           listItems = items.map((item, index) =>
             <Card> 
-              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index.toString()}>
                 {item.name}
               </Accordion.Toggle>
-              <Accordion.Collapse eventKey={index+1}>
+              <Accordion.Collapse eventKey={index.toString()}>
                 <Card.Body>
                   <ListGroup variant="flush">
                     <ListGroup.Item>Model: {item.model}</ListGroup.Item>
@@ -231,10 +231,10 @@ class App extends Component{
         case "starships":
           listItems = items.map((item, index) =>
             <Card> 
-              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index+1}>
+              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index.toString()}>
                 {item.name}
               </Accordion.Toggle>
-              <Accordion.Collapse eventKey={index+1}>
+              <Accordion.Collapse eventKey={index.toString()}>
                 <Card.Body>
                   <ListGroup variant="flush">
                     <ListGroup.Item>Model: {item.model}</ListGroup.Item>
@@ -259,10 +259,6 @@ class App extends Component{
     }
     return listItems;
   }
-  // I know what you're thinking: Why is it {index+1} instead of just {index}?
-  // The answer is simple. When I use {index} the first item in the Accordion
-  // won't open. When I do {index+1}, it does. The indices of the Cards in the
-  // Accordion are the same either way. Absolutely no clue why.
 
   getPageCount(){
     return this.state.showAll ? 1 : Math.ceil(this.state.overallCount/10);
