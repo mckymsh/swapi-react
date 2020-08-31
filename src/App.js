@@ -58,6 +58,9 @@ class App extends Component{
       window.alert("This shouldn't happen.");
     }
     if(!items) return null;
+
+      this.updateURL();
+
     var listItems = this.assembleListItems();
 
     return (
@@ -74,6 +77,7 @@ class App extends Component{
                       variant="secondary"
                       name={radio.value}
                       value={radio.value}
+                      checked={radio.value === this.state.category}
                       onChange={(e) => this.setCategory(e.currentTarget.value)}
                     >
                       {radio.name}
@@ -92,11 +96,12 @@ class App extends Component{
                 >
                   Previous
                 </Button>
-                <ToggleButtonGroup className="show-all" type="radio" name="showAll" defaultValue="pages">
+                <ToggleButtonGroup className="show-all" type="radio" name="showAll">
                   <ToggleButton
                     type="radio"
                     variant="secondary"
                     value="pages"
+                    checked={!this.state.showAll}
                     onChange={(e) => this.setShowAll(e.currentTarget.value)}
                   >
                     Page: {this.state.pageNumber}/{this.getPageCount()}
@@ -105,6 +110,7 @@ class App extends Component{
                     type="checkbox"
                     variant="secondary" 
                     value="all"
+                    checked={this.state.showAll}
                     onChange={(e) => this.setShowAll(e.currentTarget.value)}
                   >
                     Show All
@@ -282,11 +288,6 @@ class App extends Component{
   setShowAll(value){
     if(value === "all")
     {
-      window.history.pushState(
-        "object or string",
-        "Title",
-        "/"+this.state.category+"/all"
-      );
       this.setState({
         showAll: true,
         pageNumber: 1,
@@ -297,6 +298,14 @@ class App extends Component{
         pageNumber: 1,
       }, this.getItems);
     }
+  }
+
+  updateURL(){
+    window.history.pushState(
+        "object or string",
+        "Title",
+        "/" + this.state.category + "/" + ((this.state.showAll === true) ? "all" : this.state.pageNumber),
+      );
   }
 
   changePage(target){
@@ -320,12 +329,18 @@ class App extends Component{
 
   checkURL(){
     const currentPath = window.location.pathname.toLowerCase().split('/');
-    if(currentPath[0]){
-      this.setCategory(currentPath[0]);
-      return true;
-    }
+    // window.alert(currentPath[1]);
     if(currentPath[1]){
-      this.setShowAll("all")
+      this.setCategory(currentPath[1]);
+
+      // window.alert(currentPath[2]);
+      if(currentPath[2] === "all"){
+        this.setShowAll("all")
+      }else if(Number.isInteger(Number(currentPath[2]))){
+        // magically get selected page
+      }
+
+      return true;
     }
     return false;
   }
@@ -333,7 +348,6 @@ class App extends Component{
   setCategory(categoryRequested){
     var newCategory = categoryRequested;
     if(this.categories.includes(newCategory)){
-      window.history.pushState("object or string", "Title", "/"+newCategory);
       this.setState({
         category: newCategory,
         nextPage: null,
@@ -341,7 +355,6 @@ class App extends Component{
         pageNumber: 1,
       }, this.getItems);
     }else{
-      window.history.pushState("object or string", "Title", "/");
       this.getItems();
     }
   }
