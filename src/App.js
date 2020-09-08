@@ -163,7 +163,12 @@ class App extends Component{
         case "people":
           listItems = items.map((item, index) =>
             <Card> 
-              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index.toString()}>
+              <Accordion.Toggle 
+	              as={Card.Header}
+	              variant="primary"
+	              eventKey={index.toString()}
+	              expand={true}
+              >
                 {item.name}
               </Accordion.Toggle>
               <Accordion.Collapse eventKey={index.toString()}>
