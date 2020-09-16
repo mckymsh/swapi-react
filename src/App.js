@@ -167,11 +167,12 @@ class App extends Component{
 	              as={Card.Header}
 	              variant="primary"
 	              eventKey={index.toString()}
-	              expand={true}
               >
                 {item.name}
               </Accordion.Toggle>
-              <Accordion.Collapse eventKey={index.toString()}>
+              <Accordion.Collapse
+	              eventKey={index.toString()}
+              >
                 <Card.Body>
                   <ListGroup variant="flush">
                     <ListGroup.Item>Height: {item.height} cm</ListGroup.Item>
@@ -406,6 +407,11 @@ class App extends Component{
       items: newItems,
       overallCount: itemCount,
     });
+
+    this.closeAllPanels();
+  }
+
+  closeAllPanels(){
   }
 
   // What is a college education good for if not for adding
