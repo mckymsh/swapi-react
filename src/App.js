@@ -135,6 +135,8 @@ class App extends Component{
               </ButtonGroup>
             </Row>
           </div>
+        </div>
+        <div className="app-body">
           <Accordion className="results">
             {listItems}
           </Accordion>
