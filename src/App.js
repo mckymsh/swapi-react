@@ -59,7 +59,7 @@ class App extends Component{
     }
     if(!items) return null;
 
-      this.updateURL();
+    this.updateURL();
 
     var listItems = this.assembleListItems();
 
@@ -69,7 +69,12 @@ class App extends Component{
           <h1>Star Wars API</h1>
           <div>
             <Row>
-              <ToggleButtonGroup className="category-radios" type="radio" name="category" defaultValue={this.state.category}>
+              <ToggleButtonGroup 
+                className="category-radios" 
+                type="radio" 
+                name="category" 
+                defaultValue={this.state.category}
+              >
                 {categoryRadios.map((radio) => (
                     <ToggleButton
                       className="category-radio"
@@ -151,9 +156,7 @@ class App extends Component{
   //                   Count: {this.state.overallCount}
   //                 </Alert>
   //               </Row>
-  //             </Container>
-
-   
+  //             </Container>   
 
   // There is probably a way to do this more procedurally, but with so
   // few categories, it was worth the ten minutes to hand-code it 
@@ -192,7 +195,11 @@ class App extends Component{
         case "planets":
           listItems = items.map((item, index) =>
             <Card> 
-              <Accordion.Toggle as={Card.Header} variant="primary" eventKey={index.toString()}>
+              <Accordion.Toggle 
+                as={Card.Header} 
+                variant="primary" 
+                eventKey={index.toString()}
+              >
                 {item.name}
               </Accordion.Toggle>
               <Accordion.Collapse eventKey={index.toString()}>
